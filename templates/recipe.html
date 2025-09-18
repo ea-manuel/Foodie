@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ recipe.title }}</title>
+<style>
+/* ---------- GLOBAL ---------- */
+html,body{
+  margin:0;
+  padding:0;
+  min-height:100%;
+}
+
+/* floating emojis */
+.floating-ingredient {
+  position: fixed;
+  font-size: 2rem;
+  opacity: 0.3;
+  animation: float 6s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+.floating-ingredient:nth-child(1){top:10%;left:10%;animation-delay:0s;}
+.floating-ingredient:nth-child(2){top:20%;right:15%;animation-delay:1s;}
+.floating-ingredient:nth-child(3){bottom:30%;left:5%;animation-delay:2s;}
+.floating-ingredient:nth-child(4){bottom:20%;right:10%;animation-delay:3s;}
+.floating-ingredient:nth-child(5){top:50%;left:5%;animation-delay:4s;}
+.floating-ingredient:nth-child(6){top:60%;right:5%;animation-delay:5s;}
+.floating-ingredient:nth-child(7){bottom:50%;left:20%;animation-delay:1.5s;}
+.floating-ingredient:nth-child(8){top:30%;right:25%;animation-delay:2.5s;}
+
+@keyframes float{
+  0%,100%{transform:translateY(0) rotate(0deg);}
+  50%{transform:translateY(-20px) rotate(5deg);}
+}
+
+@font-face {
+  font-family: OceanTrace;
+  src: url("{{ url_for('static', filename='fonts/OceanTrace.ttf') }}");
+}
+
+/* ---------- PAGE BG ---------- */
+.main{
+  display:flex;
+  justify-content:center;
+  background: linear-gradient(35deg,#086788,#2F243A);
+  min-height:100vh;
+  padding:40px 20px;
+  background-blend-mode: darken;
+  background-attachment: fixed;
+}
+
+/* ---------- PAPER EFFECT ---------- */
+.recipe_view{
+  width:100%;
+  max-width:600px;
+  background: #fdfcf7 url("{{ url_for('static', filename='images/paper_bg.jpg') }}") repeat;
+  background-size: cover;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  padding:30px;
+  font-family: OceanTrace, serif;
+  color:#333;
+  position:relative;
+  z-index:2;
+}
+
+/* subtle “page curl” shadow at top */
+.recipe_view::before{
+  content:"";
+  position:absolute;
+  top:0;left:0;right:0;
+  height:40px;
+  background:linear-gradient(to bottom, rgba(0,0,0,0.15), transparent);
+  border-top-left-radius:20px;
+  border-top-right-radius:20px;
+  pointer-events:none;
+}
+
+.recipe_view h1{
+  text-align:center;
+  font-size:clamp(1.8rem, 5vw, 2.5rem);
+  margin-top:0;
+}
+.recipe_view img{
+  width:90%;
+  border-radius:12px;
+  display:block;
+  margin:10px auto 20px;
+}
+.recipe_view h3{
+  margin-top:20px;
+  margin-bottom:8px;
+}
+.recipe_view ul{
+  margin:0 0 20px 20px;
+}
+.recipe_view li{
+  margin-bottom:5px;
+}
+
+/* instructions text block */
+.instructions{
+  line-height:1.5;
+  white-space:pre-wrap;  /* keep line breaks */
+}
+
+/* responsive tweaks */
+@media (max-width:600px){
+  .floating-ingredient{font-size:1.5rem;}
+  .recipe_view{padding:20px;}
+}
+</style>
+</head>
+
+<body>
+  <!-- floating emojis -->
+  <div class="floating-ingredient">🍅</div>
+  <div class="floating-ingredient">🥕</div>
+  <div class="floating-ingredient">🧄</div>
+  <div class="floating-ingredient">🧅</div>
+  <div class="floating-ingredient">🥔</div>
+  <div class="floating-ingredient">🍄</div>
+  <div class="floating-ingredient">🌶️</div>
+  <div class="floating-ingredient">🥬</div>
+
+  <div class="main">
+    <div class="recipe_view">
+       <h1>{{ recipe.title }}</h1>
+
+       <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
+
+       <h3>Ingredients:</h3>
+       <ul>
+         {% for item in recipe.extendedIngredients %}
+           <li>{{ item.original }}</li>
+         {% endfor %}
+       </ul>
+
+       <h3>Instructions:</h3>
+       <div class="instructions">
+         {{ recipe.instructions | safe }}
+       </div>
+    </div>
+  </div>
+</body>
+</html>
